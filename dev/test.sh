@@ -172,10 +172,12 @@ if grep 'plaintext_new' test.txt | grep "$TWOFA_JSON_ENCRYPTED"; then
 else
     echo "PASS: The plaintext_new should no longer have the original TWOFA_JSON_ENCRYPTED data"
 fi
+vendor/bin/n98-magerun2 db:query "select user_id, encoded_config from tfa_user_config where user_id=$ADMIN_ID";
 echo "PASS"
 echo "";echo "";
 echo "Running reencrypt-tfa-data - again to verify it was all processed"
 php bin/magento gene:encryption-key-manager:reencrypt-tfa-data --force | grep --context 999 'No old entries found'
+vendor/bin/n98-magerun2 db:query "select user_id, encoded_config from tfa_user_config where user_id=$ADMIN_ID";
 echo "PASS"
 echo "";echo "";
 
